@@ -11,6 +11,21 @@
       enctype="multipart/form-data"
     >
       <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select
+          name="listing[category]"
+          id="category"
+          class="form-select"
+          required
+        >
+          <option value="" disabled selected>Choose a category</option>
+          <option value="home">Home</option>
+          <option value="experience">Experience</option>
+          <option value="service">Service</option>
+        </select>
+        <div class="invalid-feedback">Please choose a category</div>
+      </div>
+      <div class="mb-3">
         <label name="title" class="form-label">Title</label>
         <input
           name="listing[title]"
@@ -70,7 +85,7 @@
         <div class="invalid-feedback">Location should be valid</div>
       </div>
       <br />
-      <button class="btn btn-dark add-btn mt-3">Add</button>
+      <button class="btn btn-dark add-btn mt-2 mb-2">Add</button>
       <br />
     </form>
   </div>

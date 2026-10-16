@@ -22,6 +22,35 @@ router
 //New Route
 router.get("/new", isLoggedIn, listingController.rendernewForm);
 
+const categories = {
+  homes: { value: "home", title: "Homes", subtitle: "Places to stay" },
+  experiences: {
+    value: "experience",
+    title: "Experiences",
+    subtitle: "Things to do",
+  },
+  services: {
+    value: "service",
+    title: "Services",
+    subtitle: "Help for your trip",
+  },
+};
+
+router.get(
+  "/category/:type",
+  wrapAsync(async (req, res) => {
+    const cat = categories[req.params.type];
+    if (!cat) throw new ExpressError(404, "Category not found");
+
+    const allListings = await Listing.find({ category: cat.value });
+    res.render("listings/category", {
+      allListings,
+      title: cat.title,
+      subtitle: cat.subtitle,
+    });
+  }),
+);
+
 router
   .route("/:id")
   .get(wrapAsync(listingController.showListing))

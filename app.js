@@ -1,7 +1,7 @@
 const dns = require("dns");
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 
-if (process.env.NODE_ENV != "prpduction") {
+if (process.env.NODE_ENV != "production") {
   require("dotenv").config();
 }
 
@@ -85,17 +85,14 @@ app.use((req, res, next) => {
   res.locals.success = req.flash("success");
   res.locals.error = req.flash("error");
   res.locals.currUser = req.user;
+  res.locals.currentPath = req.path;
   next();
 });
 
-// app.get("/demouser", async (req, res) => {
-//   let fakeUser = new User({
-//     email: "student@gmail.com",
-//     username: "delta-student",
-//   });
-//   let registeredUser = await User.register(fakeUser, "helloworld");
-//   res.send(registeredUser);
-// });
+app.use((req, res, next) => {
+  res.locals.currentPath = req.path;
+  next();
+});
 
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);

@@ -1,60 +1,158 @@
+<% const currentPathSafe = (typeof currentPath !== "undefined") ? currentPath : ""; %>
+<% const isIndex = (currentPathSafe === "/listings" || currentPathSafe === "/"); %>
+
 <style>
-  .btn-search {
-    background-color: #fe424d;
-    color: #fff;
-    border-radius: 25px;
-    padding: 0 1rem 0 1rem;
+  .color { background-color: #f7f7f7; }
+
+  /* ---------- first row ---------- */
+  .navbar-brand i { font-size: 1.8rem; color: #ff385c; }
+
+  .nav-left, .nav-right { flex: 1; display: flex; align-items: center; }
+  .nav-right { justify-content: flex-end; gap: 0.5rem; }
+  .nav-center { display: flex; justify-content: center; gap: 1.5rem; }
+
+  .filter {
+    display: flex; align-items: center; gap: 8px;
+    padding: 4px; position: relative;
+    text-decoration: none; color: #6a6a6a; font-weight: 500;
+    margin: 0; opacity: 1; transition: color 0.2s;
+  }
+  .filter img { width: 44px; height: 44px; object-fit: contain; transition: transform 0.2s; }
+  .filter span { font-size: 0.95rem; }
+  .filter:hover { color: #222; }
+  .filter:hover img { transform: scale(1.1); }
+  .filter.active { color: #222; font-weight: 600; }
+  .filter.active::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -4px;
+    height: 2px; background: #222; border-radius: 3px;
   }
 
-  .btn-search:hover {
-    background-color: #fe424d;
-    color: #fff;
+  .circle-btn {
+    width: 40px; height: 40px; border: 0; border-radius: 50%;
+    background: #ebebeb; color: #222; font-size: 1rem;
+    display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none; transition: background 0.2s;
+  }
+  .circle-btn:hover { background: #dcdcdc; }
+
+  /* ---------- second row (search pill) ---------- */
+  .airbnb-search {
+    display: flex; align-items: center; width: 100%; max-width: 1000px;
+    background: #fff; border: 1px solid #ddd; border-radius: 50px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.12); padding: 6px;
+  }
+  .search-field {
+    flex: 1; display: flex; flex-direction: column;
+    padding: 12px 28px; margin: 0; border-radius: 50px; cursor: pointer;
+  }
+  .search-field:hover { background: #ebebeb; }
+  .search-field:focus-within { background: #fff; box-shadow: 0 3px 12px rgba(0,0,0,0.2); }
+  .search-label { font-size: 0.75rem; font-weight: 700; }
+  .search-field input {
+    border: 0; outline: 0; background: transparent; padding: 0;
+    width: 100%; font-size: 0.9rem; color: #6a6a6a;
+  }
+  .search-divider { width: 1px; height: 32px; background: #ddd; }
+  .search-btn {
+    flex-shrink: 0; width: 48px; height: 48px; border: 0;
+    border-radius: 50%; background: #fe424d; color: #fff; font-size: 1rem;
   }
 
-  .btn-search i {
-    display: inline;
-    margin-right: 0.5rem;
+  @media (max-width: 768px) {
+    .airbnb-search { flex-direction: column; border-radius: 24px; }
+    .search-field { width: 100%; }
+    .search-divider { display: none; }
+    .search-btn { width: 100%; border-radius: 24px; margin-top: 8px; }
   }
 
-  .search-inp {
-    border-radius: 25px;
-    padding: 0.5rem 3rem 0.5rem 3rem;
-    font-size: 0.9rem;
-  }
+  html { scroll-behavior: smooth; }
+  section[id] { scroll-margin-top: 200px; }
 </style>
 
-<nav class="navbar navbar-expand-lg bg-body-light border-bottom sticky-top">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="/listings"><i class="fa-solid fa-compass"></i></a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNavAltMarkup"
-    >
+<nav class="navbar navbar-expand-lg border-bottom sticky-top mb-3 h-auto color">
+  <div class="container-fluid flex-wrap">
+
+    <a class="navbar-brand d-lg-none" href="/listings"><i class="fa-solid fa-compass"></i></a>
+    <button class="navbar-toggler" type="button"
+      data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
       <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
+
+      <div class="nav-left">
+        <a class="navbar-brand d-none d-lg-block me-3" href="/listings"><i class="fa-solid fa-compass"></i></a>
         <a class="nav-link" href="/listings">Explore</a>
       </div>
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex" role="search">
-      <input class="form-control me-2 search-inp" type="search" placeholder="Search destination" aria-label="Search"/>
-      <button class="btn btn-search" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search
-      </button>
-    </form>
-      </div>
-      <div class="navbar-nav ms-auto">
-        <a class="nav-link" href="/listings/new">Airbnb your home</a>
-        <% if(!currUser) { %>
-          <a class="nav-link" href="/signup"><b>Sign Up</b></a>
-          <a class="nav-link" href="/login"><b>Log In</b></a>
+
+      <div class="nav-center nav-tabs-row">
+  <a href="/listings" class="filter <%= isIndex ? 'active' : '' %>" data-target="all">
+    <img src="/images/all.png" alt=""><span>All</span>
+  </a>
+  <a href="/listings/category/homes"
+     class="filter <%= currentPathSafe.includes('/category/homes') ? 'active' : '' %>" data-target="homes">
+    <img src="/images/homes.png" alt=""><span>Homes</span>
+  </a>
+  <a href="/listings/category/experiences"
+     class="filter <%= currentPathSafe.includes('/category/experiences') ? 'active' : '' %>" data-target="experiences">
+    <img src="/images/experiences.png" alt=""><span>Experiences</span>
+  </a>
+  <a href="/listings/category/services"
+     class="filter <%= currentPathSafe.includes('/category/services') ? 'active' : '' %>" data-target="services">
+    <img src="/images/services.png" alt=""><span>Services</span>
+  </a>
+</div>
+
+      <div class="nav-right">
+        <% if (currUser) { %>
+          <span class="circle-btn fw-bold"><%= currUser.username[0].toUpperCase() %></span>
+        <% } else { %>
+          <a href="/login" class="circle-btn" aria-label="Log in"><i class="fa-regular fa-user"></i></a>
         <% } %>
-        <% if(currUser) { %>
-          <a class="nav-link" href="/logout"><b>Log Out</b></a>
-        <% } %>
+
+        <div class="dropdown">
+          <button class="circle-btn" type="button" data-bs-toggle="dropdown"
+                  aria-expanded="false" aria-label="Menu">
+            <i class="fa-solid fa-bars"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow">
+            <% if (!currUser) { %>
+              <li><a class="dropdown-item fw-semibold" href="/signup">Sign up</a></li>
+              <li><a class="dropdown-item" href="/login">Log in</a></li>
+            <% } else { %>
+              <li><a class="dropdown-item" href="/logout">Log out</a></li>
+            <% } %>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/listings/new">List  your Airbnb</a></li>
+          </ul>
+        </div>
       </div>
+
     </div>
+
+    <% if (isIndex) { %>
+      <div class="w-100 d-flex justify-content-center mt-4 pb-3">
+        <form class="airbnb-search" role="search" action="/listings" method="GET">
+          <label class="search-field">
+            <span class="search-label">Where</span>
+            <input type="text" name="destination" placeholder="Search destinations" autocomplete="off">
+          </label>
+          <span class="search-divider"></span>
+          <label class="search-field">
+            <span class="search-label">When</span>
+            <input type="text" name="dates" placeholder="Add dates" autocomplete="off">
+          </label>
+          <span class="search-divider"></span>
+          <label class="search-field">
+            <span class="search-label">Who</span>
+            <input type="text" name="guests" placeholder="Add guests" autocomplete="off">
+          </label>
+          <button class="search-btn" type="submit" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </form>
+      </div>
+    <% } %>
+
   </div>
 </nav>

@@ -3,6 +3,12 @@ const Schema = mongoose.Schema;
 const Review = require("./review.js");
 
 const listingSchema = new Schema({
+  category: {
+    type: String,
+    enum: ["home", "experience", "service"],
+    default: "home",
+    required: true,
+  },
   title: {
     type: String,
     required: true,
