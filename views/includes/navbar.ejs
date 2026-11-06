@@ -1,5 +1,6 @@
 <% const currentPathSafe = (typeof currentPath !== "undefined") ? currentPath : ""; %>
-<% const isIndex = (currentPathSafe === "/listings" || currentPathSafe === "/"); %>
+<% const cleanPath = currentPathSafe.replace(/\/+$/, "") || "/"; %>
+<% const isIndex = (cleanPath === "/listings" || cleanPath === "/"); %>
 
 <style>
   .color { background-color: #f7f7f7; }
@@ -86,21 +87,25 @@
       </div>
 
       <div class="nav-center nav-tabs-row">
-  <a href="/listings" class="filter <%= isIndex ? 'active' : '' %>" data-target="all">
-    <img src="/images/all.png" alt=""><span>All</span>
-  </a>
-  <a href="/listings/category/homes"
-     class="filter <%= currentPathSafe.includes('/category/homes') ? 'active' : '' %>" data-target="homes">
-    <img src="/images/homes.png" alt=""><span>Homes</span>
-  </a>
-  <a href="/listings/category/experiences"
-     class="filter <%= currentPathSafe.includes('/category/experiences') ? 'active' : '' %>" data-target="experiences">
-    <img src="/images/experiences.png" alt=""><span>Experiences</span>
-  </a>
-  <a href="/listings/category/services"
-     class="filter <%= currentPathSafe.includes('/category/services') ? 'active' : '' %>" data-target="services">
-    <img src="/images/services.png" alt=""><span>Services</span>
-  </a>
+       <% if (isIndex) { %>
+      <div class="nav-center nav-tabs-row">
+        <a href="/listings" class="filter active" data-target="all">
+          <img src="/images/all.png" alt=""><span>All</span>
+        </a>
+        <a href="/listings/category/homes"
+           class="filter <%= currentPathSafe.includes('/category/homes') ? 'active' : '' %>" data-target="homes">
+          <img src="/images/homes.png" alt=""><span>Homes</span>
+        </a>
+        <a href="/listings/category/experiences"
+           class="filter <%= currentPathSafe.includes('/category/experiences') ? 'active' : '' %>" data-target="experiences">
+          <img src="/images/experiences.png" alt=""><span>Experiences</span>
+        </a>
+        <a href="/listings/category/services"
+           class="filter <%= currentPathSafe.includes('/category/services') ? 'active' : '' %>" data-target="services">
+          <img src="/images/services.png" alt=""><span>Services</span>
+        </a>
+      </div>
+      <% } %>
 </div>
 
       <div class="nav-right">
