@@ -1,8 +1,6 @@
-// Example starter JavaScript for disabling form submissions if there are invalid fields
 (() => {
   "use strict";
 
-  // Fetch all the forms we want to apply custom Bootstrap validation styles to
   const forms = document.querySelectorAll(".needs-validation");
 
   // Loop over them and prevent submission
@@ -22,15 +20,6 @@
   });
 })();
 
-// document.querySelectorAll(".nav-tabs-row .filter").forEach((tab) => {
-//   tab.addEventListener("click", () => {
-//     document
-//       .querySelectorAll(".nav-tabs-row .filter")
-//       .forEach((t) => t.classList.remove("active"));
-//     tab.classList.add("active");
-//   });
-// });
-
 const tabs = document.querySelectorAll(".nav-tabs-row .filter");
 
 function setActive(tab) {
@@ -38,11 +27,10 @@ function setActive(tab) {
   if (tab) tab.classList.add("active");
 }
 
-// click: scroll if the section is on this page, else follow the link
 tabs.forEach((tab) => {
   tab.addEventListener("click", (e) => {
     const section = document.getElementById(tab.dataset.target);
-    if (!section) return; // other page → normal navigation
+    if (!section) return;
     e.preventDefault();
     section.scrollIntoView({ behavior: "smooth", block: "start" });
     history.replaceState(null, "", "#" + tab.dataset.target);
@@ -50,7 +38,6 @@ tabs.forEach((tab) => {
   });
 });
 
-// scroll spy: the active tab follows the scrollbar
 const sections = [...tabs]
   .map((t) => document.getElementById(t.dataset.target))
   .filter(Boolean);

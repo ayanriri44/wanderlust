@@ -13,13 +13,10 @@ const listingSchema = new Schema({
     type: String,
     required: true,
   },
-  description: String,
-  // image: {
-  //     type:  String,
-  //     default: "https://unsplash.com/photos/palm-tree-near-seashore-Siuwr3uCir0",
-  //     set: (v) => v === "" ? "default https://unsplash.com/photos/palm-tree-near-seashore-Siuwr3uCir0link"
-  //         : v,
-  // },
+  description: {
+    type: String,
+    default: "",
+  },
   image: {
     url: String,
     filename: String,

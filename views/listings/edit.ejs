@@ -2,6 +2,13 @@
 <div class="row mt-3">
   <div class="col-8 offset-2">
     <h3>Edit your Listing</h3>
+    <form
+      method="POST"
+      action="/listings/<%= listing._id %>?_method=PUT"
+      novalidate
+      class="needs-validation"
+      enctype="multipart/form-data"
+    >
     <div class="mb-3">
   <label for="category" class="form-label">Category</label>
   <select name="listing[category]" id="category" class="form-select" required>
@@ -10,13 +17,6 @@
     <option value="service" <%= listing.category === "service" ? "selected" : "" %>>Service</option>
   </select>
 </div>
-    <form
-      method="POST"
-      action="/listings/<%= listing._id %>?_method=PUT"
-      novalidate
-      class="needs-validation"
-      enctype="multipart/form-data"
-    >
       <div class="mb-3">
         <label name="title" class="form-label">Title</label>
         <input
@@ -34,7 +34,6 @@
           name="listing[description]"
           value="<%= listing.description %>"
           class="form-control"
-          required
         ></textarea>
         <div class="invalid-feedback">Enter Despriction</div>
       </div>
